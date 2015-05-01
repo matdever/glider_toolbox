@@ -111,7 +111,7 @@ threshold = 10; %10
 %----------------------
 
 % Gets rid of all measurements made during surfacings (shallower than 1.5m)
-var(abs(depth) < 1.5) = [];
+var(abs(depth) < 1.5,:) = [];
 depth(abs(depth) < 1.5) = [];
 
 % Stores the input depth
@@ -178,7 +178,7 @@ for numvar = 1:N % For each variable
         cast_struct.upcast_depth{1,numvar} = NaN*ones(max(finish_up - start_up)+1,length(start_up));
         
         for ii = 1:length(start_up)
-            cast_struct.upcast{1,numvar}(1:finish_up(ii)-start_up(ii)+1,ii) = var(start_up(ii):finish_up(ii));
+            cast_struct.upcast{1,numvar}(1:finish_up(ii)-start_up(ii)+1,ii) = var(start_up(ii):finish_up(ii),N);
             cast_struct.upcast_depth{1,numvar}(1:finish_up(ii)-start_up(ii)+1,ii) = depthvar(start_up(ii):finish_up(ii));
         end
         
@@ -192,7 +192,7 @@ for numvar = 1:N % For each variable
         
         for ii = 1:length(start_down)
             
-            cast_struct.downcast{1,numvar}(1:finish_down(ii)-start_down(ii)+1,ii) = var(start_down(ii):finish_down(ii));
+            cast_struct.downcast{1,numvar}(1:finish_down(ii)-start_down(ii)+1,ii) = var(start_down(ii):finish_down(ii),N);
             cast_struct.downcast_depth{1,numvar}(1:finish_down(ii)-start_down(ii)+1,ii) = depthvar(start_down(ii):finish_down(ii));
         end
     end

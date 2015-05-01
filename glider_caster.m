@@ -87,10 +87,10 @@ if ismatrix(var)==1
     
     % Time as 1st dimension
     if N == length(depth)
-        var = var'; 
-    
-    % Retruns an error if none of "var"'s dimensions match the length of
-    % "depth"
+        var = var';
+        
+        % Returns an error if none of "var"'s dimensions match the length of
+        % "depth"
     elseif M ~= length(depth) && N ~= length(depth)
         error(['glider_caster.m: one of the dimensions of "var" must match',...
             ' the length of the "depth" vector'])
@@ -163,9 +163,9 @@ elseif abs(depth(1))<threshold
 end
 
 % NOTE:
-% Threshold in meters can be converted to a threshold in the number of 
+% Threshold in meters can be converted to a threshold in the number of
 % observations, if the vertical resolution is known:
-% threshold in meters / average vertical resolution = threshold in number 
+% threshold in meters / average vertical resolution = threshold in number
 % of observation.
 
 for numvar = 1:N % For each variable
@@ -196,36 +196,39 @@ for numvar = 1:N % For each variable
             cast_struct.downcast_depth{1,numvar}(1:finish_down(ii)-start_down(ii)+1,ii) = depthvar(start_down(ii):finish_down(ii));
         end
     end
-
 end
+
+
+% PLOTS
+
 % Still in development for better visualization
 if isequal(plot_request,'yes')
     figure
     % Plot upcasts
     subplot(2,1,1)
     if isfield(cast_struct,'upcast')
-    h0 = plot(ind_up,depth(ind_up),'ok'); axis ij
-    hold on
-    title(['Upcasts (',num2str(size(cast_struct.upcast,2)),' profiles)'])
-    % Upcasts end members
-    h1 = plot(start_up,depth(start_up),'sr','markerfacecolor','r');
-    h2 = plot(finish_up,depth(finish_up),'og','markerfacecolor','g');
-    legend([h0 h1 h2],'upcast','start upcast','end upcast')
+        h0 = plot(ind_up,depth(ind_up),'ok'); axis ij
+        hold on
+        title(['Upcasts (',num2str(size(cast_struct.upcast{1},2)),' profiles)'])
+        % Upcasts end members
+        h1 = plot(start_up,depth(start_up),'sr','markerfacecolor','r');
+        h2 = plot(finish_up,depth(finish_up),'og','markerfacecolor','g');
+        legend([h0 h1 h2],'upcast','start upcast','end upcast')
     else
-    text(0.25,0.5,'No upcast profiles','fontsize',14)  
+        text(0.25,0.5,'No upcast profiles','fontsize',14)
     end
     
     % Plot downcasts
     subplot(2,1,2)
-    if isfield(cast_struct,'upcast')
-    h0 = plot(ind_down,depth(ind_down),'ok'); axis ij
-    hold on
-    title(['Downcasts (',num2str(size(cast_struct.downcast,2)),' profiles)'])
-    % Downcasts end members
-    h1 = plot(start_down,depth(start_down),'sr','markerfacecolor','r');
-    h2 = plot(finish_down,depth(finish_down),'og','markerfacecolor','g');
-    legend([h0 h1 h2],'downcast','start downcast','end downcast')
+    if isfield(cast_struct,'downcast')
+        h0 = plot(ind_down,depth(ind_down),'ok'); axis ij
+        hold on
+        title(['Downcasts (',num2str(size(cast_struct.downcast{1},2)),' profiles)'])
+        % Downcasts end members
+        h1 = plot(start_down,depth(start_down),'sr','markerfacecolor','r');
+        h2 = plot(finish_down,depth(finish_down),'og','markerfacecolor','g');
+        legend([h0 h1 h2],'downcast','start downcast','end downcast')
     else
-    text(0.25,0.5,'No downcast profiles','fontsize',14)  
+        text(0.25,0.5,'No downcast profiles','fontsize',14)
     end
 end

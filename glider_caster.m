@@ -213,7 +213,7 @@ if isequal(plot_request,'yes')
         % Upcasts end members
         h1 = plot(start_up,depth(start_up),'sr','markerfacecolor','r');
         h2 = plot(finish_up,depth(finish_up),'og','markerfacecolor','g');
-        legend([h0 h1 h2],'upcast','start upcast','end upcast')
+        legend([h0 h1 h2],'upcast','start upcast','end upcast','location','best')
     else
         text(0.25,0.5,'No upcast profiles','fontsize',14)
     end
@@ -227,7 +227,7 @@ if isequal(plot_request,'yes')
         % Downcasts end members
         h1 = plot(start_down,depth(start_down),'sr','markerfacecolor','r');
         h2 = plot(finish_down,depth(finish_down),'og','markerfacecolor','g');
-        legend([h0 h1 h2],'downcast','start downcast','end downcast')
+        legend([h0 h1 h2],'downcast','start downcast','end downcast','location','best')
     else
         text(0.25,0.5,'No downcast profiles','fontsize',14)
     end

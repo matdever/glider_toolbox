@@ -40,6 +40,9 @@ function cast_struct = glider_caster(var,depth,varargin)
 %           depth vector to filter out short term variations in depth
 %           gradient. Degree of smoothing is linked to the threshold value
 %           used throughout the code (default = 10m)
+%       - Mathieu Dever & Tetjane Ross on 12-05-2015: Corrected a typo on
+%           line 181, and added an IF-LOOP that produces the depth field
+%           only once, as it is the same for every variables
 %==================================================================
 
 %----------------------
@@ -178,8 +181,11 @@ for numvar = 1:N % For each variable
         cast_struct.upcast_depth{1,numvar} = NaN*ones(max(finish_up - start_up)+1,length(start_up));
         
         for ii = 1:length(start_up)
-            cast_struct.upcast{1,numvar}(1:finish_up(ii)-start_up(ii)+1,ii) = var(start_up(ii):finish_up(ii),N);
-            cast_struct.upcast_depth{1,numvar}(1:finish_up(ii)-start_up(ii)+1,ii) = depthvar(start_up(ii):finish_up(ii));
+            cast_struct.upcast{1,numvar}(1:finish_up(ii)-start_up(ii)+1,ii) = var(start_up(ii):finish_up(ii),numvar);%%TARR substituted numvar for N (May 11, 2015)
+            if numvar==N %%TARR added if statement (May 11, 2015)
+                cast_struct.upcast_depth(1:finish_up(ii)-start_up(ii)+1,ii) = depthvar(start_up(ii):finish_up(ii));
+                [length(1:finish_up(ii)-start_up(ii)+1) length(depthvar(start_up(ii):finish_up(ii)))]
+            end
         end
         
     end
@@ -192,8 +198,11 @@ for numvar = 1:N % For each variable
         
         for ii = 1:length(start_down)
             
-            cast_struct.downcast{1,numvar}(1:finish_down(ii)-start_down(ii)+1,ii) = var(start_down(ii):finish_down(ii),N);
-            cast_struct.downcast_depth{1,numvar}(1:finish_down(ii)-start_down(ii)+1,ii) = depthvar(start_down(ii):finish_down(ii));
+            cast_struct.downcast{1,numvar}(1:finish_down(ii)-start_down(ii)+1,ii) = var(start_down(ii):finish_down(ii),numvar);%%TARR substituted numvar for N (May 11, 2015)
+            if numvar==N%%TARR added if statement (May 11, 2015)
+                cast_struct.upcast_depth(1:finish_up(ii)-start_up(ii)+1,ii) = depthvar(start_up(ii):finish_up(ii));
+                [length(1:finish_up(ii)-start_up(ii)+1) length(depthvar(start_up(ii):finish_up(ii)))]
+            end
         end
     end
 end

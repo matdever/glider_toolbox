@@ -19,6 +19,9 @@ function cast_struct = glider_profiler(var,depth,varargin)
 %       - varargin are the optional arguments available:
 %               - (...,'plot','yes') will produce a plot with the inflexion
 %                   points
+%               - (...,'sensitivity',10) control the extent of the
+%               smoothing necessary to detect inflexion points (default =
+%               10).
 %
 % OUTPUT:
 %       - cast_struct is a structure that includes 2D matrices where 1
@@ -33,6 +36,10 @@ function cast_struct = glider_profiler(var,depth,varargin)
 % REFERENCE:
 %
 % UPDATES:
+%       - Mathieu Dever on 31-05-2016: Several changes including the
+%           definition of a variable to trim surfacing data, as well as the
+%           addition of a 'sensitivity' optional input to control the 
+%           smoothing of the transect
 %       - Mathieu Dever on 30-04-2015: Add an abs() on lines 80 and 98. It
 %          makes sure that even if the gradient is negative, it finds
 %          datapoints separated by +/- 10 m.
@@ -62,8 +69,10 @@ for ii = 1:2:length(vin)
     % If plot is required
     if isequal(vin{ii},'plot')
         plot_request = vin{ii+1};
+    elseif isequal(vin{ii},'sensitivity')
+        threshold = vin{ii+1};
     else
-        error('-plot is the only optional argument available... for now')
+        error('-plot or -sensitivity are the only optional arguments available... for now')
     end
 end; clear ii
 
@@ -106,16 +115,18 @@ end
 
 
 % Threshold used throughout the code (in meters)
-threshold = 10; %10
-
+if exist('threshold')==0
+    threshold = 10; %(Default value)
+end
+    depth_min = 3;
 
 %----------------------
 % CORE CODE
 %----------------------
 
 % Gets rid of all measurements made during surfacings (shallower than 1.5m)
-var(abs(depth) < 1.5,:) = [];
-depth(abs(depth) < 1.5) = [];
+var(abs(depth) < depth_min,:) = [];
+depth(abs(depth) < depth_min) = [];
 
 % Stores the input depth
 depthvar = depth;

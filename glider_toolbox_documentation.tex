@@ -84,7 +84,13 @@ The function creates a matrix of dimensions [N $\times$ 2], where N is the numbe
 The function \texttt{glider\_profiler.m} isolate each upcast and downcast throughout a glider mission, or section, specified by the user. Its major weakness is that it relies on an arbitrary threshold value defined by the author. The value of 10 m is used to defined what constitute a cast; it goes around the issue that the glider sometimes briefly moves in the opposite direction of the cast direction due to vertical currents.
 
 \subsubsection{Inputs}
-The function requires a input variable (as a column vector), or variables concatenated together into a matrix [M $\times$ N], where M is the number of observations and N the number of variable to process (e.g., temperature, salinity, backscatter, ...). It also requires the depth of each observation, used to separate upcasts from downcasts. An additional input can be specified to produce a plot showing the starting point and finishing point used to define each profile. 
+The function requires a input variable (as a column vector), or variables concatenated together into a matrix [M $\times$ N], where M is the number of observations and N the number of variable to process (e.g., temperature, salinity, backscatter, ...). It also requires the depth of each observation, used to separate upcasts from downcasts. 
+
+Optional inputs include 
+\begin{itemize}
+\item the possibility to produce a plot showing the starting point and finishing point used to define each profile,
+\item the possibility to control the smoothing applied to the data to accurately detect inflexion point (default value is 10). Smoothing the profiles prevents the algorithm from interpreting small-scale vertical movements of the glider as inflexion points. A sensitivity too low would split a profile where the glider experiences small-scale vertical movement,  sensitivity too high (i.e., $>$30) would make the algorithm fail to detect inflexions occurring rapidly, grouping glider profiles together.
+\end{itemize}
 
 \subsubsection{Outputs}
 
